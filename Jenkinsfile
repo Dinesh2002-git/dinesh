@@ -1,36 +1,38 @@
 pipeline {
-  agent any
+    agent any
 
-  //environment {
-   // MVN_HOME = '/usr/share/maven'
-  //}
-
-  stages {
-    stage('Clone') {
-      steps {
-        git url: 'https://github.com/Soumyajit-Rout/webapp.git'
-      }
+    tools {
+        maven 'M2_HOME'
     }
 
-    stage('Build') {
-      steps {
-        sh 'mvn clean install'
-      }
+    environment {
+        MVN_CREDENTIALS = credentials('nexus-creds')
     }
 
-    stage('Upload to Nexus') {
-      steps {
-        sh 'mvn deploy'
-      }
-    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/your-username/your-repo.git'
+            }
+        }
 
-    stage('Deploy to Tomcat') {
-      steps {
-        //sshagent(['tomcat-ssh-key']) {
-          sh """
-          scp /var/lib/jenkins/workspace/app-deploy/target/*.war ubuntu@172.31.84.222:/home/ubuntu/tomcat8/webapps/
-          """
+        stage('Build WAR') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Deploy to Nexus') {
+            steps {
+                sh 'mvn deploy'
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                echo "Deployment to Tomcat placeholder"
+                // Optional: SCP or Curl deploy WAR to Tomcat webapps
+            }
         }
     }
-  }
 }
