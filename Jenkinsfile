@@ -34,10 +34,11 @@ ipeline {
             steps {
                 sshagent(credentials: ['tomcat-ssh-key']) {
                     sh """
-                        scp target/*.war $/var/lib/jenkins/workspace/app-deploy@$ubuntu@13.218.235.192:$/home/ubuntu/tomcat8/webapps/
+                        scp target/*.war ${/var/lib/jenkins/workspace/app-deploy{@${ubuntu@13.218.235.192}:${/home/ubuntu/tomcat8/webapps}/
                     """
                 }
             }
+        
         }
     }
 
