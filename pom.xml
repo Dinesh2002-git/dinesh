@@ -68,12 +68,12 @@
 <repository>
 <id>RepoR</id>
 <name>RepoR</name>
-<url>http://18.218.203.106:8080/nexus/content/repositories/RepoR/</url>
+<url>http://54.197.38.191:8080/nexus/content/repositories/RepoR/</url>
 </repository>
 <snapshotRepository>
 <id>RepoS</id>
 <name>RepoS</name>
-<url>http://18.218.203.106:8080/nexus/content/repositories/RepoS/</url>
+<url>http://54.197.38.191:8080/nexus/content/repositories/RepoS/</url>
 </snapshotRepository>
 </distributionManagement>
 </project>
