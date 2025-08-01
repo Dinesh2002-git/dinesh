@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage("checkout") {
             steps {
-                git 'https://github.com/nishankainfo/webapp.git'
+                git 'https://github.com/Dinesh2002-git/dinesh.git'
             }
         }
         stage("compile") {
