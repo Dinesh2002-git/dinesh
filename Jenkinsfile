@@ -1,4 +1,4 @@
-ipeline {
+peline {
     agent any
 
     tools {
@@ -6,7 +6,7 @@ ipeline {
     }
 
     environment {
-        DEPLOY_SERVER = '13.218.235.192'
+        DEPLOY_SERVER = '54.161.170.159'
         DEPLOY_USER = 'ubuntu'
         DEPLOY_PATH = '/home/ubuntu/tomcat8/webapps'
     }
@@ -34,7 +34,7 @@ ipeline {
             steps {
                 sshagent(credentials: ['tomcat-ssh-key']) {
                     sh """
-                        scp target/*.war ${/var/lib/jenkins/workspace/app-deploy{@${ubuntu@13.218.235.192}:${/home/ubuntu/tomcat8/webapps}/
+                        scp target/*.war ${/var/lib/jenkins/workspace/app-deploy}@${ubuntu@13.218.235.192}:${/home/ubuntu/tomcat8/webapps}/
                     """
                 }
             }
