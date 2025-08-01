@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Clone') {
       steps {
-        git url: 'https://github.com/Soumyajit-Rout/webapp.git'
+        git url: 'https://github.com/Dinesh2002-git/webapp.git'
       }
     }
 
@@ -28,7 +28,7 @@ pipeline {
       steps {
         //sshagent(['tomcat-ssh-key']) {
           sh """
-          scp /var/lib/jenkins/workspace/app-deploy/target/*.war ubuntu@172.31.19.28 :/home/ubuntu/tomcat8/webapps/
+          scp /var/lib/jenkins/workspace/app-deploy/target/*.war ubuntu@13.218.235.192:/home/ubuntu/tomcat8/webapps/
           """
         }
     }
