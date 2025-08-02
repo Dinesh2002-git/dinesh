@@ -1,10 +1,6 @@
 pipeline {
   agent any
 
-  //environment {
-   // MVN_HOME = '/usr/share/maven'
-  //}
-
   stages {
     stage('Clone') {
       steps {
@@ -26,11 +22,11 @@ pipeline {
 
     stage('Deploy to Tomcat') {
       steps {
-        //sshagent(['tomcat-ssh-key']) {
-          sh """
-          scp /var/lib/jenkins/workspace/app-deploy/target/*.war ubuntu@172.31.87.228:/home/ubuntu/tomcat8/webapps/
-          """
-        }
+        sh '''
+        ssh-keyscan -H 172.31.87.228 >> ~/.ssh/known_hosts
+        scp /var/lib/jenkins/workspace/app-deploy/target/*.war ubuntu@172.31.87.228:/home/ubuntu/tomcat8/webapps/
+        '''
+      }
     }
   }
 }
