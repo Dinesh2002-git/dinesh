@@ -32,10 +32,10 @@ pipeline {
                 sshagent(['deploy']) {
     sh """
                  
-            scp -o StrictHostKeyChecking=no target/myweb.war ubuntu@172.31.94.244:/home/ubuntu/tomcat8/webapps/
+            scp -o StrictHostKeyChecking=no target/myweb.war ubuntu@172.31.87.228:/home/ubuntu/tomcat8/webapps/
 
-              ssh ubuntu@172.31.94.244 /home/ubuntu/tomcat8/bin/shutdown.sh
-               ssh ubuntu@172.31.94.244 /home/ubuntu/tomcat8/bin/startup.sh
+              ssh ubuntu@172.31.87.228 /home/ubuntu/tomcat8/bin/shutdown.sh
+               ssh ubuntu@172.31.87.228 /home/ubuntu/tomcat8/bin/startup.sh
             
           
           """
@@ -45,7 +45,7 @@ pipeline {
         }
         stage("backup") {
             steps {
-                nexusArtifactUploader artifacts: [[artifactId: 'idream-it-solutions', classifier: '', file: 'target/myweb.war', type: 'war']], credentialsId: 'nexus', groupId: 'com.idream.webapp', nexusUrl: '3.111.144.41:8080/nexus', nexusVersion: 'nexus2', protocol: 'http', repository: 'repoR', version: '1.1'
+                nexusArtifactUploader artifacts: [[artifactId: 'idream-it-solutions', classifier: '', file: 'target/myweb.war', type: 'war']], credentialsId: 'nexus', groupId: 'com.idream.webapp', nexusUrl: '44.211.170.6:8080/nexus', nexusVersion: 'nexus', protocol: 'http', repository: 'repoR', version: '1.1'
             }
         }
     }
