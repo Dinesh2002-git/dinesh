@@ -1,53 +1,43 @@
 pipeline {
-    tools {
-        jdk 'JAVA_HOME'
-        maven 'M2_HOME'
-    }
-    agent any
-    
-    stages {
-        stage("checkout") {
-            steps {
-                git 'https://github.com/Dinesh2002-git/dinesh.git'
-            }
-        }
-        stage("compile") {
-            steps {
-                sh 'mvn compile'
-            }
-        }
-        stage("test") {
-            steps {
-                sh 'mvn test'
-            }
-        }
-        stage("package") {
-            steps {
-                sh 'mvn clean package'
-                sh "mv target/*.war target/myweb.war"
-            }
-        }
-        stage("deploy") {
-            steps {
-                sshagent(['deploy']) {
-    sh """
-                 
-            scp -o StrictHostKeyChecking=no target/myweb.war ubuntu@172.31.87.228:/home/ubuntu/tomcat8/webapps/
+  agent any
 
-              ssh ubuntu@172.31.87.228 /home/ubuntu/tomcat8/bin/shutdown.sh
-               ssh ubuntu@172.31.87.228 /home/ubuntu/tomcat8/bin/startup.sh
-            
-          
-          """
-
-}
-            }
-        }
-        stage("backup") {
-            steps {
-                nexusArtifactUploader artifacts: [[artifactId: 'idream-it-solutions', classifier: '', file: 'target/myweb.war', type: 'war']], credentialsId: 'nexus', groupId: 'com.idream.webapp', nexusUrl: '44.211.170.6:8080/nexus', nexusVersion: 'nexus', protocol: 'http', repository: 'repoR', version: '1.1'
-            }
-        }
+  stages {
+    stage('Clone') {
+      steps {
+        git url: 'https://github.com/Dinesh2002-git/dinesh.git'
+      }
     }
+
+    stage('Build') {
+      steps {
+        sh 'mvn clean install'
+      }
+    }
+
+    stage('Upload to Nexus') {
+      steps {
+        sh 'mvn deploy'
+      }
+    }
+
+    stage('Deploy to Tomcat') {
+      steps {
+        sshagent(['tomcat-ssh-key']) {
+          sh '''
+            mkdir -p ~/.ssh
+            ssh-keyscan -H 172.31.87.228 >> ~/.ssh/known_hosts
+
+            # Copy WAR file
+            scp target/*.war ubuntu@172.31.87.228:/home/ubuntu/tomcat8/webapps/
+
+            # Restart Tomcat remotely
+            ssh ubuntu@172.31.87.228 '/home/ubuntu/tomcat8/bin/shutdown.sh || true'
+            ssh ubuntu@172.31.87.228 '/home/ubuntu/tomcat8/bin/startup.sh'
+          '''
+        }
+      }
+    }
+  }
 }
+
 
