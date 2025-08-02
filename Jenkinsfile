@@ -21,12 +21,14 @@ pipeline {
     }
 
     stage('Deploy to Tomcat') {
-      steps {
-        sh '''
+  steps {
+    sshagent(['tomcat-ssh-key']) {
+      sh '''
+        mkdir -p ~/.ssh
         ssh-keyscan -H 172.31.87.228 >> ~/.ssh/known_hosts
-        scp /var/lib/jenkins/workspace/app-deploy/target/*.war ubuntu@172.31.87.228:/home/ubuntu/tomcat8/webapps/
-        '''
-      }
+        scp target/*.war ubuntu@172.31.87.228:/home/ubuntu/tomcat8/webapps/
+      '''
     }
   }
 }
+
